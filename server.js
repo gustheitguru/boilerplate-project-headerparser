@@ -3,7 +3,8 @@
 
 // init project
 var express = require('express');
-var app = express(); 
+var app = express();
+var ipaddr = require('ipaddr.js'); //
 
 // enable CORS (https://en.wikipedia.org/wiki/Cross-origin_resource_sharing)
 // so that your API is remotely testable by FCC 
@@ -24,9 +25,21 @@ app.get("/api/hello", function (req, res) {
   res.json({greeting: 'hello API'});
 });
 
+app.get("/api/whoami", (req, res) => {
+	//goal to return 
+	// IP :
+	// language : "accept-language"
+	// Software : "user-agent"
+	// console.log(req.connection.remoteAddress);
+	let ip = req.connection.remoteAddress.split(',')[0];
+	let language = req.headers['accept-language'];
+	let software = req.headers['user-agent']
+	res.json({'IP': ip,'language':language,'software': software});
+
+});
 
 
 // listen for requests :)
-var listener = app.listen(process.env.PORT, function () {
+var listener = app.listen(process.env.PORT || 3000, function () {
   console.log('Your app is listening on port ' + listener.address().port);
 });
